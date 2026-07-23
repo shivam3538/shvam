@@ -1,0 +1,451 @@
+import pygame
+import random
+import math
+
+pygame.init()
+
+W, H = 900, 600
+screen = pygame.display.set_mode((W, H))
+pygame.display.set_caption("Shivam ❤️ Shivani")
+
+clock = pygame.time.Clock()
+
+# Fonts
+title = pygame.font.SysFont("georgia", 48)
+font = pygame.font.SysFont("georgia", 25)
+
+# Colors
+BLACK = (8, 10, 30)
+WHITE = (255,255,255)
+PINK = (255,120,180)
+RED = (255,50,90)
+GOLD = (255,220,70)
+PAPER = (255,240,210)
+
+
+# Stars
+stars = []
+
+for i in range(130):
+    stars.append([
+        random.randint(0,W),
+        random.randint(0,H),
+        random.randint(1,3)
+    ])
+
+
+# Petals
+petals=[]
+
+for i in range(70):
+    petals.append([
+        random.randint(0,W),
+        random.randint(-600,0),
+        random.randint(2,5)
+    ])
+
+
+
+# Letter
+
+letter = """
+Dear Shivani ❤️
+
+Kabhi kabhi koi insaan
+bina koshish ke special ban jata hai.
+
+Tumhari smile meri favourite smile hai.
+
+Tumhari ek chhoti si baat bhi
+mere din ko beautiful bana deti hai.
+
+Main perfect nahi hoon...
+
+Lekin hamesha koshish karunga
+tumhe khush rakhne ki,
+tumhari respect karne ki,
+aur tumhari smile ki wajah banne ki.
+
+Mujhe perfect fairy tale nahi chahiye...
+
+Bas ek simple si story chahiye
+jisme tum aur main ho.
+
+Shivani...
+
+Kya tum meri story ka
+sabse khoobsurat chapter banogi? ❤️
+
+- Shivam ❤️
+"""
+
+
+typed=""
+letter_pos=0
+
+
+scene=0
+timer=0
+
+
+yes_btn = pygame.Rect(220,500,200,55)
+no_btn = pygame.Rect(520,500,200,55)
+
+
+fireworks=[]
+
+
+def text(t,y,f,c):
+
+    img=f.render(t,True,c)
+
+    screen.blit(
+        img,
+        (W//2-img.get_width()//2,y)
+    )
+
+
+def heart(x,y,s):
+
+    pygame.draw.circle(
+        screen,RED,
+        (x-s//2,y),
+        s//2
+    )
+
+    pygame.draw.circle(
+        screen,RED,
+        (x+s//2,y),
+        s//2
+    )
+
+    pygame.draw.polygon(
+        screen,
+        RED,
+        [(x-s,y),(x+s,y),(x,y+s*2)]
+    )
+
+
+def wrap_text(txt,x,y,width):
+
+    for para in txt.split("\n"):
+
+        line=""
+
+        for word in para.split():
+
+            test=line+" "+word
+
+            if font.size(test)[0] < width:
+
+                line=test
+
+            else:
+
+                img=font.render(
+                    line,
+                    True,
+                    (80,40,40)
+                )
+
+                screen.blit(img,(x,y))
+
+                y+=30
+                line=word
+
+
+        if line:
+
+            img=font.render(
+                line,
+                True,
+                (80,40,40)
+            )
+
+            screen.blit(img,(x,y))
+            y+=30
+
+
+
+def create_fireworks():
+
+    for i in range(150):
+
+        fireworks.append([
+            450,
+            300,
+            random.choice([RED,PINK,GOLD,WHITE]),
+            random.randint(-8,8),
+            random.randint(-8,8)
+        ])
+
+
+
+
+running=True
+
+
+while running:
+
+    clock.tick(60)
+
+    screen.fill(BLACK)
+
+
+    # stars
+
+    for s in stars:
+
+        pygame.draw.circle(
+            screen,
+            WHITE,
+            (s[0],s[1]),
+            s[2]
+        )
+
+
+    # petals
+
+    for p in petals:
+
+        pygame.draw.circle(
+            screen,
+            PINK,
+            (p[0],p[1]),
+            5
+        )
+
+        p[1]+=p[2]
+
+        if p[1]>H:
+
+            p[1]=0
+
+
+
+    # INTRO
+
+    if scene==0:
+
+        text(
+            "A Special Story...",
+            170,
+            title,
+            WHITE
+        )
+
+        text(
+            "For Shivani ❤️",
+            270,
+            title,
+            PINK
+        )
+
+        text(
+            "From Shivam ✨",
+            360,
+            font,
+            GOLD
+        )
+
+        timer+=1
+
+        if timer>180:
+            scene=1
+
+
+
+    # LETTER
+
+    elif scene==1:
+
+        text(
+            "💌 A Letter For You",
+            40,
+            title,
+            PINK
+        )
+
+
+        pygame.draw.rect(
+            screen,
+            PAPER,
+            (120,110,660,390),
+            border_radius=20
+        )
+
+
+        wrap_text(
+            typed,
+            160,
+            140,
+            580
+        )
+
+
+        if pygame.time.get_ticks()%5==0:
+
+            if letter_pos < len(letter):
+
+                typed += letter[letter_pos]
+                letter_pos += 1
+
+            else:
+
+                scene=2
+
+
+
+    # PROPOSAL
+
+    elif scene==2:
+
+        text(
+            "Shivani ❤️",
+            50,
+            title,
+            PINK
+        )
+
+
+        beat=60+int(
+            math.sin(
+                pygame.time.get_ticks()/120
+            )*10
+        )
+
+
+        heart(
+            450,
+            230,
+            beat
+        )
+
+
+        text(
+            "I don't need a perfect story...",
+            330,
+            font,
+            WHITE
+        )
+
+
+        text(
+            "I just want my favorite person in mine ❤️",
+            370,
+            font,
+            GOLD
+        )
+
+
+        pygame.draw.rect(
+            screen,
+            (0,180,90),
+            yes_btn,
+            border_radius=20
+        )
+
+
+        pygame.draw.rect(
+            screen,
+            (150,80,150),
+            no_btn,
+            border_radius=20
+        )
+
+
+        screen.blit(
+            font.render(
+                "❤️ YES",
+                True,
+                WHITE
+            ),
+            (290,515)
+        )
+
+
+        screen.blit(
+            font.render(
+                "🙈 NO",
+                True,
+                WHITE
+            ),
+            (585,515)
+        )
+
+
+
+    # END
+
+    elif scene==3:
+
+
+        text(
+            "❤️ Shivani Said YES ❤️",
+            120,
+            title,
+            GOLD
+        )
+
+
+        text(
+            "You are my favorite reason to smile ✨",
+            240,
+            font,
+            WHITE
+        )
+
+
+        text(
+            "Our beautiful story begins now ❤️",
+            300,
+            font,
+            PINK
+        )
+
+
+        for f in fireworks:
+
+            pygame.draw.circle(
+                screen,
+                f[2],
+                (f[0],f[1]),
+                5
+            )
+
+            f[0]+=f[3]
+            f[1]+=f[4]
+
+
+
+    for event in pygame.event.get():
+
+        if event.type==pygame.QUIT:
+
+            running=False
+
+
+        if event.type==pygame.MOUSEBUTTONDOWN:
+
+
+            if scene==2:
+
+
+                if yes_btn.collidepoint(event.pos):
+
+                    scene=3
+                    create_fireworks()
+
+
+                if no_btn.collidepoint(event.pos):
+
+                    no_btn.x=random.randint(80,650)
+                    no_btn.y=random.randint(430,520)
+
+
+
+    pygame.display.update()
+
+
+
+pygame.quit()
