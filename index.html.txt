@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Shivam ❤️ Shivani</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Georgia,serif;
+}
+
+body{
+overflow:hidden;
+background:#050816;
+color:white;
+}
+
+canvas{
+position:fixed;
+left:0;
+top:0;
+z-index:-1;
+}
+
+#main{
+width:100%;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+text-align:center;
+padding:20px;
+}
+
+h1{
+font-size:55px;
+color:#ff6fa5;
+animation:glow 2s infinite;
+}
+
+h2{
+margin-top:20px;
+font-size:28px;
+color:white;
+}
+
+#start{
+margin-top:50px;
+padding:18px 45px;
+font-size:22px;
+border:none;
+border-radius:40px;
+background:#ff4d88;
+color:white;
+cursor:pointer;
+transition:.3s;
+}
+
+#start:hover{
+transform:scale(1.1);
+}
+
+#letter{
+display:none;
+width:75%;
+max-width:800px;
+height:420px;
+background:#fff5df;
+color:#5b2d2d;
+padding:35px;
+border-radius:20px;
+overflow:auto;
+font-size:22px;
+line-height:38px;
+box-shadow:0 0 35px rgba(255,255,255,.3);
+}
+
+#proposal{
+display:none;
+text-align:center;
+}
+
+#heart{
+font-size:120px;
+animation:beat .8s infinite;
+}
+
+button{
+padding:15px 40px;
+font-size:24px;
+margin:20px;
+border:none;
+border-radius:40px;
+cursor:pointer;
+}
+
+#yes{
+background:#18b15d;
+color:white;
+}
+
+#no{
+background:#9c27b0;
+color:white;
+position:absolute;
+}
+
+#final{
+display:none;
+font-size:50px;
+color:gold;
+animation:glow 1s infinite;
+}
+
+@keyframes beat{
+
+0%{transform:scale(1);}
+50%{transform:scale(1.25);}
+100%{transform:scale(1);}
+
+}
+
+@keyframes glow{
+
+0%{text-shadow:0 0 10px hotpink;}
+50%{text-shadow:0 0 35px red;}
+100%{text-shadow:0 0 10px hotpink;}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<canvas id="bg"></canvas>
+
+<div id="main">
+
+<h1>Shivam ❤️ Shivani</h1>
+
+<h2>A Special Story...</h2>
+
+<button id="start">
+Open My Heart 💌
+</button>
+
+<div id="letter"></div>
+
+<div id="proposal">
+
+<div id="heart">❤️</div>
+
+<h1>Will You Be Mine?</h1>
+
+<br>
+
+<button id="yes">
+YES ❤️
+</button>
+
+<button id="no">
+NO 🙈
+</button>
+
+</div>
+
+<div id="final">
+
+❤️ Shivani Said YES ❤️
+
+<br><br>
+
+✨ Our Beautiful Story Begins ✨
+
+</div>
+
+</div>
+
+<script>const canvas = document.getElementById("bg");
+const ctx = canvas.getContext("2d");
+
+function resize() {
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+}
+resize();
+onresize = resize;
+
+// Stars
+let stars = [];
+for (let i = 0; i < 150; i++) {
+    stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 2 + 1
+    });
+}
+
+// Petals
+let petals = [];
+for (let i = 0; i < 50; i++) {
+    petals.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        s: Math.random() * 3 + 2,
+        v: Math.random() * 2 + 1
+    });
+}
+
+function draw() {
+
+    ctx.fillStyle = "#050816";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    // Stars
+    ctx.fillStyle = "white";
+    stars.forEach(s=>{
+        ctx.beginPath();
+        ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+        ctx.fill();
+    });
+
+    // Petals
+    ctx.fillStyle = "#ff7aa8";
+    petals.forEach(p=>{
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.s,0,Math.PI*2);
+        ctx.fill();
+
+        p.y += p.v;
+
+        if(p.y>canvas.height){
+            p.y=-10;
+            p.x=Math.random()*canvas.width;
+        }
+    });
+
+    requestAnimationFrame(draw);
+}
+draw();
+
+const start = document.getElementById("start");
+const letter = document.getElementById("letter");
+const proposal = document.getElementById("proposal");
+const final = document.getElementById("final");
+
+const msg = `Dear Shivani ❤️
+
+Kabhi kabhi koi insaan bina koshish ke special ban jata hai.
+
+Tumhari smile meri favourite smile hai.
+
+Main perfect nahi hoon...
+
+Lekin hamesha tumhari respect karunga,
+tumhari smile ki wajah banne ki koshish karunga.
+
+Mujhe perfect fairy tale nahi chahiye...
+
+Bas ek simple si story chahiye
+jisme tum aur main ho.
+
+Shivani...
+
+Kya tum meri story ka
+sabse khoobsurat chapter banogi? ❤️
+
+- Shivam ❤️`;
+
+start.onclick = () => {
+
+    start.style.display = "none";
+
+    letter.style.display = "block";
+
+    let i = 0;
+
+    let t = setInterval(() => {
+
+        letter.innerHTML += msg[i] == "\n" ? "<br>" : msg[i];
+
+        i++;
+
+        if(i >= msg.length){
+
+            clearInterval(t);
+
+            setTimeout(()=>{
+
+                letter.style.display="none";
+                proposal.style.display="block";
+
+            },2000);
+
+        }
+
+    },35);
+
+};const yes = document.getElementById("yes");
+const no = document.getElementById("no");
+
+// NO button bhagega
+no.addEventListener("mouseover", () => {
+
+    no.style.left = Math.random() * (window.innerWidth - 150) + "px";
+    no.style.top = Math.random() * (window.innerHeight - 80) + "px";
+
+});
+
+// Fireworks
+let fireworks = [];
+
+function createFireworks(){
+
+    for(let i=0;i<250;i++){
+
+        fireworks.push({
+
+            x: canvas.width/2,
+            y: canvas.height/2,
+
+            dx:(Math.random()-0.5)*12,
+            dy:(Math.random()-0.5)*12,
+
+            size:Math.random()*4+2,
+
+            color:`hsl(${Math.random()*360},100%,60%)`
+
+        });
+
+    }
+
+}
+
+function animateFireworks(){
+
+    fireworks.forEach(f=>{
+
+        ctx.beginPath();
+
+        ctx.fillStyle=f.color;
+
+        ctx.arc(f.x,f.y,f.size,0,Math.PI*2);
+
+        ctx.fill();
+
+        f.x+=f.dx;
+        f.y+=f.dy;
+
+        f.dy+=0.05;
+
+    });
+
+    requestAnimationFrame(animateFireworks);
+
+}
+
+yes.onclick=()=>{
+
+    proposal.style.display="none";
+
+    final.style.display="block";
+
+    createFireworks();
+
+    animateFireworks();
+
+};
+
+</script>
+
+</body>
+</html>
